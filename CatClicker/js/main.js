@@ -1,52 +1,94 @@
-let cats = [{
-		"name": "Kitty",
-		"count": 0,
-		"image_url": "images/cat1.jpg"
-	}, {
-	
-		"name": "Jessy",
-		"count": 0,
-		"image_url": "images/cat2.jpg"
-	}, {
-		"name": "Tommy",
-		"count": 0,
-		"image_url": "images/cat3.jpg"
-	}, {
-		"name": "Sippy",
-		"count": 0,
-		"image_url": "images/cat4.jpg"
-	}, {
-		"name": "Rusty",
-		"count": 0,
-		"image_url": "images/cat5.jpg"
-}];
+$(function() {
+	var model = {
+		cats: [{
+			"name": "Kitty",
+			"count": 0,
+			"image_url": "images/cat1.jpg"
+		}, {
+			"name": "Jessy",
+			"count": 0,
+			"image_url": "images/cat2.jpg"
+		}, {
+			"name": "Tommy",
+			"count": 0,
+			"image_url": "images/cat3.jpg"
+		}, {
+			"name": "Sippy",
+			"count": 0,
+			"image_url": "images/cat4.jpg"
+		}, {
+			"name": "Rusty",
+			"count": 0,
+			"image_url": "images/cat5.jpg"
+		}],
 
-function displayItem(item) {
-	let $display = $("#display");
-	$display.empty();
-	let $htmlName = $("<h3>" + item.name + "</h3>");
-	$display.append($htmlName);
-	$cat_image = $("<img src='" + item.image_url + "' alt='A cat' width='500' height='300'>");
-	$display.append($cat_image);
-	$display.append("<div id='count'>" + item.count + "</div>");
-	$cat_image.click(function() {
-		item.count++;
-		$("#count").text(item.count);
-	});
-};
+		currentCat: null,
+	};
 
-function displayList(items) {
-	let $list = $("#list");
-	$list.empty();
-	for (let i = 0; i < items.length; i++) {
-		let $item = $("<li><h3>" + items[i].name+ "</h3></li>");
-		$item.click((function(item) {
-			return function() {
-				displayItem(item);
-			};
-		}(items[i])));
-		$list.append($item);
-	}
-};
+	var octopus = {
+		init: function() {
+			view.init();
+		},
 
-displayList(cats);
+		getCats: function() {
+			return model.cats;
+		},
+
+		getCurrentCat: function() {
+			return model.currentCat;
+		},
+
+		setCurrentCat: function(cat) {
+			model.currentCat = cat;
+		},
+
+		incrementCount: function() {
+			model.currentCat.count++;
+		}
+	};
+
+	var view = {
+		init: function() {
+			this.catImage = $("#cat_image");
+			this.catImage.click(function() {
+				octopus.incrementCount();
+				$("#count").text(octopus.getCurrentCat().count);
+			});
+			view.render();
+		},
+
+		displayList: function() {
+			let items = octopus.getCats();
+			let $list = $("#list");
+			$list.empty();
+			for (let i = 0; i < items.length; i++) {
+				let $item = $("<li><h3>" + items[i].name + "</h3></li>");
+				$list.append($item);
+				$item.click((function(item) {
+					return function() {
+						octopus.setCurrentCat(item);
+						view.displayItem();
+					};
+				})(items[i]));
+			}
+		},
+
+		displayItem: function() {
+			let current = octopus.getCurrentCat();
+			if (!current) {
+				this.catImage.attr("src", "images/cats.jpg");
+				return;
+			}
+			$("#name").text(current.name);
+			this.catImage.attr("src", current.image_url);
+			$("#count").text(current.count);
+		},
+
+		render: function() {
+			view.displayList();
+			view.displayItem();
+		}
+	};
+
+	octopus.init();
+});
