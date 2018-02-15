@@ -23,10 +23,15 @@ $(function() {
 		}],
 
 		currentCat: null,
+		visible: false,
 	};
 
 	var octopus = {
 		init: function() {
+			this.adminArea = $("#admin_area");
+			this.name = $("#cat_name");
+			this.url = $("#cat_url");
+			this.count = $("#cat_count");
 			view.init();
 		},
 
@@ -44,6 +49,35 @@ $(function() {
 
 		incrementCount: function() {
 			model.currentCat.count++;
+		},
+
+		setVisibility: function() {
+			if (model.visible) {
+				model.visible = false;
+			} else {
+				model.visible = true;
+			}
+		},
+
+		getVisibility: function() {
+			return model.visible;
+		},
+
+		showForm: function() {
+			this.adminArea.show();
+			this.name.val(model.currentCat.name);
+			this.url.val(model.currentCat.image_url);
+			this.count.val(model.currentCat.count);
+		},
+
+		hideForm: function() {
+			this.adminArea.hide();
+		},
+		
+		updateForm: function() {
+			model.currentCat.name = this.name.val();
+			model.currentCat.image_url = this.url.val();
+			model.currentCat.count = this.count.val();
 		}
 	};
 
@@ -52,7 +86,23 @@ $(function() {
 			this.catImage = $("#cat_image");
 			this.catImage.click(function() {
 				octopus.incrementCount();
-				$("#count").text(octopus.getCurrentCat().count);
+				let count = octopus.getCurrentCat().count;
+				$("#count").text(count);
+				$("#cat_count").val(count);
+			});
+			$("#admin_area").hide();
+			$("#admin_btn").click(function() {
+				octopus.setVisibility();
+				octopus.showForm();
+			});
+			$("#cancel_btn").click(function() {
+				octopus.setVisibility();
+				octopus.hideForm();
+			});
+			$("#save_btn").click(function() {
+				octopus.updateForm();
+				octopus.hideForm();
+				view.render();
 			});
 			view.render();
 		},
@@ -68,6 +118,9 @@ $(function() {
 					return function() {
 						octopus.setCurrentCat(item);
 						view.displayItem();
+						if (octopus.getVisibility()) {
+							octopus.showForm();
+						}
 					};
 				})(items[i]));
 			}
