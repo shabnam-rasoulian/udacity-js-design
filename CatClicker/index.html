@@ -1,42 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Cat Clicker</title>
-		<link rel="stylesheet" href="css/style.css">
-	</head>
-	<body>
-		<h1>How many cats do you want?</h1>
-		<ul id="list"></ul>
-		<div class="display" id="display">
-			<h3 id="name"></h3>
-			<img src="" alt="A cat" width="500" height="300" id="cat_image">
-			<div id="count"></div>
-		</div>
-		<br><br>
-		<button id="admin_btn" type="button">Admin</button>
-		<br><br>
-		<form id="admin_area">
-			<table>
-				<tr>
-					<td><span>Name</span></td>
-					<td><input type="text" value="" id="cat_name"></td>
-				</tr>
-				<tr>
-					<td><span>Image URL</span></td>
-					<td><input type="text" value="" id="cat_url"></td>
-				</tr>
-				<tr>
-					<td><span>Clicks Number</span></td>
-					<td><input type="text" value="" id="cat_count"></td>
-				</tr>
-			</table>
-			<br>
-			<button id="cancel_btn" type="button">Cancel</button>
-			<button id="save_btn" type="button">Save</button>
-		</form>
-		<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
-		<script src="js/main.js"></script>
-	</body>
+<head>
+    <meta charset="UTF-8">
+    <title>Cat Clicker</title>
+</head>
+<body>
+    <ul data-bind="foreach: catList">
+    	<li data-bind="text: name, click: $parent.setCurrentCat"></li>
+    </ul>
+    <div data-bind="with: currentCat()">
+
+        <h2 data-bind="text: name"></h2>
+	<h3 data-bind="text: level"></h3>
+        <div data-bind="text: count"></div>
+	<img src="" alt="cute cat" data-bind="click: $parent.incrementCounter, attr: {src: image_url}" width="500" height="300">
+	<h3>Nicknames</h3>
+	<ul data-bind="foreach: nickNames">
+		<li data-bind="text: $data"></li>
+	</ul>
+
+    </div>
+    <script src="js/lib/knockout-3.2.0.js"></script>
+    <script src="js/app.js"></script>
+</body>
 </html>
