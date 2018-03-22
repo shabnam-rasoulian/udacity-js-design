@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Manhattan</title>
+		<link rel="stylesheet" href="css/style.css">
+		<script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body>
+		<div id="container">
+			<div id="search">
+				<input type="search" placeholder="Search" data-bind="textInput: searchAttractions, valueUpdate: 'afterkeydown'">
+				<div id="lst">
+					<ul data-bind="foreach: filteredAttractions" class="lst">
+						<li data-bind="text: name, click: $parent.setCurrentLocation"></li>
+					</ul>
+				</div>
+				<div class="display" data-bind="with: currentLocation()">
+					<div data-bind="text: name"></div>
+				</div>
+			</div>
+			<div id="mapDiv"></div>
+		</div>
+		<script src="js/lib/jQuery.js"></script>
+		<script src="js/lib/knockout-3.2.0.js"></script>
+		<script src="js/model.js"></script>
+		<script src="js/viewModel.js"></script>
+	</body>
+</html>
